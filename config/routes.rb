@@ -1,7 +1,5 @@
 SampleApp::Application.routes.draw do
-<<<<<<< HEAD
   # The priority is based upon order of creation: 
-=======
   get "static_pages/home"
 
   get "static_pages/help"
@@ -11,7 +9,6 @@ SampleApp::Application.routes.draw do
   get "static_pages/contact"
 
   # The priority is based upon order of creation:
->>>>>>> d1d45fbfdb85cc6cdf6cc500e0dbac57deb1ee86
   # first created -> highest priority.
 
   # Sample of regular route:
