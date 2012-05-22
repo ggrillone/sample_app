@@ -1,5 +1,5 @@
 SampleApp::Application.routes.draw do
-  get "users/new"
+  resources :users
 
   # The priority is based upon order of creation: 
   root to: 'static_pages#home'
