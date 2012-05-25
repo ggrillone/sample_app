@@ -20,5 +20,6 @@ module SessionsHelper
 	def sign_out
 		current_user = nil
 		cookies.delete(:remember_token)
+		redirect_to root_path
 	end
 end
