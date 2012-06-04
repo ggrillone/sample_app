@@ -1,6 +1,7 @@
 SampleApp::Application.routes.draw do
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
+  resources :microposts, only: [:create, :destroy]
 
   # The priority is based upon order of creation: 
   root to: 'static_pages#home'

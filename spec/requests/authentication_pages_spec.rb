@@ -111,6 +111,20 @@ describe "Authentication" do
 					it { should have_selector('title', text: 'Sign in') }
 				end 
 			end
+
+			# Microposts
+			describe "in the Microposts controller" do
+
+				describe "submitting to the create action" do
+					before { post microposts_path }
+					specify { response.should redirect_to(signin_path) }
+				end
+
+				describe "submitting to the destroy action" do
+					before { delete micropost_path(FactoryGirl.create(:micropost)) }
+					specify { response.should redirect_to(signin_path) }
+				end
+			end
 		end
 
 		describe "as signed in user" do
@@ -120,8 +134,16 @@ describe "Authentication" do
 			describe "should not have access to NEW and CREATE actions" do
 				before { visit signup_path }
 
-				it { should have_selector('h1', text: 'Sample App') }
 				it { should_not have_selector('title', text: full_title('Sign up')) }
+			end
+
+			describe "visiting different users profile should not display delete links" do
+				let(:user2) { FactoryGirl.create(:user) }
+				let!(:m1) { FactoryGirl.create(:micropost, user: user2, content: "Foo") }
+				before { visit user_path(user2) }
+
+				it { should have_selector('h1', text: user2.name) }
+				it { should_not have_link('delete') }
 			end
 		end
 
@@ -135,7 +157,7 @@ describe "Authentication" do
 				it { should_not have_selector('title', text: full_title('Edit user')) }
 			end
 
-		describe "submitting a PUT request to the Users#update action" do
+			describe "submitting a PUT request to the Users#update action" do
 				before { put user_path(wrong_user) }
 				specify { response.should redirect_to(root_url) }
 			end

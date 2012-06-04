@@ -36,6 +36,35 @@ describe "Static pages" do
 
     it_should_behave_like "all static pages"
     it { should_not have_selector 'title', text: ' | Home' }
+
+    describe "for signed-in users" do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
+        FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet")
+        sign_in user
+        visit root_path
+      end
+
+      it "should render the user's feed" do
+        user.feed.each do |item|
+          page.should have_selector("li##{item.id}", text: item.content)
+        end
+      end
+
+      describe "pluralized microposts" do
+        it { should have_selector('span', text: 'microposts') }
+        specify { user.microposts.count.should == 2 }
+      end
+
+      describe "non-pluralized microposts" do
+        let(:destroy_micropost) { user.microposts.find(1) }
+        before { destroy_micropost.destroy }
+
+        specify { user.microposts.count.should == 1 }
+        it { should_not have_selector('span', text: '1 microposts') }
+      end
+    end
   end
 
   describe "Help page" do
